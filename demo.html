@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>demo</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      //需要一个对象，这个对象有data，computed， watch methods，初始化data，comuted，watch，methods方法
+      function Due (data, computed, watch, methods) {
+        this.$data = data
+        this.$computed = computed
+        this.$watch = watch
+        this.methods = methods
+        this.setComputed = false
+        this.computedKey = null
+        this.dep = {}
+        this.curDep = []
+        this.active = false
+        return this.beforeCreated()
+      }
+      Due.prototype.initData = function () {
+        Object.keys(this.$data).forEach((key) => {
+          this[key] = this.$data[key]
+        })
+      }
+      Due.prototype.initComputed = function () {
+        Object.keys(this.$computed).forEach((key) => {
+          this.$computed[key] = this.$computed[key].bind(this)
+          this[key] = null
+        })
+      }
+      Due.prototype.initWatch = function () {
+        Object.keys(this.$watch).forEach((key) => {
+          this.$watch[key] = this.$watch[key].bind(this)
+          if (!this.dep[key]) {
+            this.dep[key] = {
+              watch: key
+            }
+          } else {
+            this.dep[key].watch = key
+          }
+        })
+      }
+      Due.prototype.initState = function () { // 初始化完成后为state设置代理
+        this.$state = {}
+        Object.keys(this.$data).forEach((key) => {
+          this.$state[key] = 'data'
+        })
+        Object.keys(this.$computed).forEach((key) => {
+          this.$state[key] = 'computed'
+        })
+      }
+      Due.prototype.addSub = function (key) {
+        if (this.computedKey) {
+          if (!this.dep[key]) {
+            this.dep[key] = {
+              computed: [key]
+            }
+          } else if (!this.dep[key].computed) {
+            this.dep[key].computed = [key]
+          } else if (!this.dep[key].computed.find((item) => item === key)) {
+            this.dep[key].computed.push(key)
+          }
+        }
+      }
+      Due.prototype.pubRedis = function (key, v, ov){
+        if (!this.active) {
+          this.active = true
+          requestAnimationFrame(() => {
+            console.log(this.curDep, this.dep)
+            this.curDep.forEach((item) => {
+              if (this.dep[item.key] && this.dep[item.key].watch) {
+                this.$watch[item.key](item.v, item.ov)
+              }
+            })
+            this.curDep.forEach((item) => {
+              if (this.dep[item.key] && this.dep[item.key].cpmputed) {
+                this.dep[item.key].cpmputed.forEach((info) => {
+                  this.$computed[info](item.v, item.ov)
+                })
+              }
+            })
+            this.curDep = []
+            this.active = false
+          })
+        } else {
+          var i = this.curDep.findIndex((item) => item.key === key)
+          if (i !== -1) {
+            this.curDep[i] = {key: key, v: v, ov: ov}
+          } else {
+            this.curDep.push({key: key, v: v, ov: ov})
+          }
+        }
+      }
+      Due.prototype.initProxy = function () {
+        console.log(this)
+        return new Proxy(this, {
+          get (target, key) {
+            if (!(key in target.$state)) {
+              console.error(`${key} is invalid key`)
+            } else {
+              if (target.$state[key] && target.$state[key] === 'computed') {
+                target.setComputed = true
+                target.computedKey = key
+                target.pubRedis(key, target.$computed[key](), target[key])
+                target[key] = target.$computed[key]()
+                this.computedKey = false
+              }
+              target.addSub(key)
+              return target[key]
+            }
+          },
+          set (target, key, value) {
+            if (!(key in target.$state)) {
+              console.error(`${key} is invalid key`)
+            } else {
+              if (target.$state[key] && target.$state[key] === 'computed' && !target.setComputed) {
+                console.error(`can not set computed key ${key}`)
+                return
+              }
+              if (target.setComputed) {
+                target.setComputed = false
+              }
+              target.pubRedis(key, value, target[key])
+              target[key] = value
+            }
+          }
+        })
+      }
+      Due.prototype.beforeCreated = function () {
+        this.initData()
+        this.initComputed()
+        this.initState()
+        this.initWatch()
+        return this.initProxy()
+      }
+      var data = {d1: 1, d2: 1, d3: 1}
+      var computed = {
+        computedD () {
+          console.log('d1 || d2 || d3 change')
+          return this.d1 + this.d2 + this.d3
+        },
+        computedD1 () {
+          console.log('d1 from computed')
+          return this.d1
+        },
+        computedD2 () {
+          console.log('d2 change from computed')
+          return this.d2
+        }
+      }
+      var watch = {
+        d2 (v, ov) {
+          console.log(v, ov, 'd2 change from watch')
+        },
+        computedD (v, ov) {
+          console.log(v, ov, 'computedD1 change from watch')
+        }
+      }
+      var dm = new Due(data, computed, watch)
+      // console.log(dm.computedD, dm.computedD1, dm.computedD2, 'get')
+      dm.d1 = 2
+      dm.d2 = 2
+      // console.log(dm.computedD, dm.computedD1, dm.computedD2, 'get')
+    </script>
+  </body>
+</html>
