@@ -6,6 +6,13 @@
   </head>
   <body>
     <script type="text/javascript">
+    // 思路如下：
+    // 1.将Due的data，computed进行代理
+    // 2.在get data时看是否存在一个标识target，如果存在则为其新增一个发布成员
+    // 3.在get computed时看自己是否完成了依赖添加，如果添加了则查看其dirty是否为true，是则执行get方法，否则直接返回value
+    // 4.在set 时将其发布列表添加到全局发布列表中
+    // 5.全局发布列表讲同步接收需要发布的值，并异步发布相应执行watch（如果computed get会通过dirty来标识是否需要执行get函数，并在执行完后讲dirty改为false）
+    // 以下是之前写的一个demo，效果不好。实现也与上面思路不同，但原理基本一致
       //需要一个对象，这个对象有data，computed， watch methods，初始化data，comuted，watch，methods方法
       function Due (data, computed, watch, methods) {
         this.$data = data
@@ -112,6 +119,7 @@
             }
           },
           set (target, key, value) {
+            console.log('hhhh')
             if (!(key in target.$state)) {
               console.error(`${key} is invalid key`)
             } else {
@@ -161,7 +169,7 @@
       var dm = new Due(data, computed, watch)
       // console.log(dm.computedD, dm.computedD1, dm.computedD2, 'get')
       dm.d1 = 2
-      dm.d2 = 2
+      // dm.d2 = 2
       // console.log(dm.computedD, dm.computedD1, dm.computedD2, 'get')
     </script>
   </body>

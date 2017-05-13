@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <router-link to='Hello'>back to index</router-link>
-    test
+    <p>显然是异步的</p>
   </div>
 </template>
 

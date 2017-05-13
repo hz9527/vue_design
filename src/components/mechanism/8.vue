@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <router-link to='Hello'>back to index</router-link>
-    test
+    <p>watch死循环，道理很简单，watch的执行函数是可以更改state的，比如watch v1在v1中change v2 并watch v2在v2中change v1</p>
   </div>
 </template>
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>vue</title>
+  <script src='./vue.js'></script>
+  <style>
+    p{
+      width:100px;
+      height:100px;
+      background: #f55;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+  </div>
+  <script>
+    new Vue({
+      el: '#app',
+      template: `
+        <p @click='click'>
+          {{ c1 }}
+        </p>
+      `,
+      data() {
+        return {
+          v1: 1,
+          v2: 2,
+          v3: 3
+        }
+      },
+      computed: {
+        c1 () {
+          debugger
+          return this.v1 + this.v2
+        }
+      },
+      watch: {
+        v1() {
+          debugger
+          console.log(2)
+        }
+      },
+      methods: {
+        click () {
+          debugger
+          this.v1++
+          this.v1++
+        }
+      }
+    })
+  </script>
+</body>
+</html>

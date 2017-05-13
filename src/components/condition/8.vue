@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
-    <router-link to='Hello'>back to index</router-link>
-    test
+    <router-link to='/'>back to index</router-link>
+    <p>好吧，感觉这么问题是个废话，上个页面应该解答了这个问题了</p>
   </div>
 </template>
 
