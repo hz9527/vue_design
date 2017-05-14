@@ -2744,7 +2744,7 @@ var Watcher = function Watcher (
   if (typeof expOrFn === 'function') {
     this.getter = expOrFn;
   } else {
-    this.getter = parsePath(expOrFn);
+    this.getter = parsePath(expOrFn); // 将表达式转化为一个函数
     if (!this.getter) {
       this.getter = function () {};
       "development" !== 'production' && warn(
