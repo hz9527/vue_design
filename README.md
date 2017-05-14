@@ -18,11 +18,8 @@ npm run build
 npm run build --report
 ```
 
-```flow
-st=>start: Start
-e=>end: End
-op1=>operation: My Operation
-sub1=>subroutine: My Subroutine
-cond=>condition: Yes or No?
-io=>inputoutput: catch something...
-```
+看会儿笔记？
+[vue](#vue)  
+[vuex初体验]('./vuex.md')  
+[vueRouter初体验]('./vuerouter.md')  
+[vuetouch初体验]('./vuetouch.md')
