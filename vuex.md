@@ -1,10 +1,10 @@
-目录：
+目录：  
 [vuex是什么](#vuex是什么)  
 [vuex基本使用](#vuex基本使用)  
 [如何划分？](#如何划分？)  
 [详解API](#详解api)  
 [event bus](#eventbus)  
-[back](../)
+[back](../../)
 ## vuex
 ### vuex是什么?
 1. store save what state we want to manage 我们不应该直接去获取store中的状态，而应该代理其get与set行为这样才能做到一处change所有都能收到消息
