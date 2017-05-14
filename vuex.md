@@ -3,8 +3,8 @@
 [vuex基本使用](#vuex基本使用)  
 [如何划分？](#如何划分？)  
 [详解API](#详解api)  
-[event bus](#event bus)  
-[back]('./README.md')
+[event bus](#eventbus)  
+[back](../)
 ## vuex
 ### vuex是什么?
 1. store save what state we want to manage 我们不应该直接去获取store中的状态，而应该代理其get与set行为这样才能做到一处change所有都能收到消息
@@ -182,7 +182,7 @@ const store = new Vuex.Store({
 ##### 6. modules
 使用与普通的一致，因此为了防止有同名的getters mutations actions，官方给的方案是加一个命名空间
 
-## event bus  
+## eventBus  
 [toTop](#vuex)  
 1. 在全局到处一个空的vue实例 export default new Vue()
 2. 在需要发布事件或监听事件的组件内引入vue空实例 import bus from './bus.js'
