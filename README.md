@@ -20,6 +20,6 @@ npm run build --report
 
 看会儿笔记？  
 [vue](#vue)  
-[vuex初体验]('vuex.md')  
+[vuex初体验](./vuex.md)  
 [vueRouter初体验]('vuerouter.md')  
 [vuetouch初体验]('vuetouch.md')
