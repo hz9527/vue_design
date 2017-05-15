@@ -165,11 +165,62 @@ routes: [
 
 #### 全局钩子
 [to 路由钩子](#路由钩子)  
+beforeEach与afterEach将作为全局的路由钩子，这也意味着每次路由跳转都将执行钩子内的代码，包括修改参数和父子路由的跳转
+1.beforeEach，三个参数，to from next，to与from都是跳转对象，即route（就是那个可以访问name params query的对象而不是可以push的路由对象）
+```JavaScript
+var router = new vueRouter({
+  routes: [
+    ...
+  ]
+})
+router.beforeEach((to, from, next) => {
+  if (to.name === 'xx') {
+    ...
+  }
+  ...
+  next()
+})
+```
+顺便提一下，next到底是个啥？就像express中的next，在责任链模式中承担将一个行为交给责任链中下一个选手处理  
+> next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。  
+next(): 进行管道中的下一个钩子。如果全部钩子执行完了，则导航的状态就是 confirmed （确认的）。  
+next(false): 中断当前的导航。如果浏览器的 URL 改变了（可能是用户手动或者浏览器后退按钮），那么 URL 地址会重置到 from 路由对应的地址。  
+next('/') 或者 next({ path: '/' }): 跳转到一个不同的地址。当前的导航被中断，然后进行一个新的导航。  
+**确保要调用 next 方法，否则钩子就不会被 resolved。**
 
+2.afterEach，一个参数route，此时路由跳转已经完成，因此并没有from，to，next，可以理解为to
 #### 路由独享钩子
 [to 路由钩子](#路由钩子)  
+无需多言，直接上代码
+```JavaScript
+routes: [
+  {
+    path: '/detail',
+    name: 'detail',
+    component: Detail,
+    beforeEnter: (to, from, next) => {
+      ... //参考beforeRouteEnter
+    }
+  }
+]
+```
 #### 组件钩子  
 [to 路由钩子](#路由钩子)  
+1. beforeRouteEnter，参数to， from， next，注此时组件还没创建，因此访问this并不是组件
+2. beforeRouteUpdate，参数to， from， next，可以访问this，比较适合参数变化，父页面使用
+3. beforeRouteLeave，参数to， from， next，可以访问this，比较适合在跳转前需要将一些状态保存给vuex的场景
+理解了上面，组件路由钩子应该分分钟就能弄明白，不过还是以比较特殊的beforeRouteEnter为例吧  
+```JavaScript
+beforeRouteEnter (to, from, next) => {
+  if (to.name === 'detail') {
+    next(vm => { // next内函数将在created时执行
+      vm.list = this.getVuexList
+    })
+  } else {
+    next() // do`t forget exec next
+  }
+}
+```
 
 ### 元信息与滚动行为
 [toTop](#目录：)  

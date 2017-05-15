@@ -36,6 +36,9 @@ export default {
       console.log(this.v1, 'v1 has change')
       this.v2++
     }
+  },
+  created () {
+    // console.log(this.$router, this.$route)
   }
 }
 </script>

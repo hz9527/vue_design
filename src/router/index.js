@@ -32,7 +32,8 @@ export default new Router({
     {
       path: '/condition1',
       name: '1.1',
-      component: condition1
+      component: condition1,
+      meta: 'test'
     },
     {
       path: '/condition2',
