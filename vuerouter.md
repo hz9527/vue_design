@@ -1,4 +1,4 @@
-#### 目录：  
+#### 目录 
 [**vueRouter基本使用**](#vuerouter基本使用)  
 [h5history与编程式导航](#h5history与编程式导航)  
 [重定向及别名与命名视图](#重定向及别名与命名视图)  
@@ -11,7 +11,7 @@
 
 ## vueRouter基本使用
 #### 1.引入vue－router与基本配置
-[toTop](#目录：)  
+[toTop](#目录)  
 1. 类似vuex，先使用Vue.use(vue-router) 再实例化一个路由对象
 2. 在注入的组件中使用<view-router></view-router>
 3. 在注入实例中传入路由
@@ -48,7 +48,7 @@ new Vue({
 ```
 
 #### 2.带参路由
-[toTop](#目录：)  
+[toTop](#目录)  
 在实践中经常使用即在path中使用/:name，对了，并不是只有最后一个可以使用参数，所以这里用动态路由更为贴切
 ```JavaScript
 new vueRouter({
@@ -72,7 +72,7 @@ watch: {
 ```
 
 #### 3.嵌套路由
-[toTop](#目录：)  
+[toTop](#目录)  
 一个较为复杂的页面，可以使用嵌套路由来实现一个页面，这样的好处是加载页面依赖的资源将减少，在项目上也能看出页面间的依赖及入口关系，另外在频繁的交互中没必要重载主页面  
 比如一个表单页面，点击每一个表单会跳转到填写页，各个填写页都不同，因此可以将这些填写也作为表单页的子路由  
 1. 父路由在进入子路由，并不会被销毁
@@ -97,7 +97,7 @@ routes: [
 ```
 
 ### h5history与编程式导航
-[toTop](#目录：)  
+[toTop](#目录)  
 vue-router关于history管理完全参照h5history接口[传送门](../../blob/master/h5history.md)  
 我们知道，在vue－router中跳转路由，主要有两种类型，一种是使用<router-link></router-link>，另一种则是使用组件的$router(也可使用router实例)  
 几个接口  
@@ -117,7 +117,7 @@ router.push({name: 'name', params: {userId: id}, query: {name: 'hz'}})
 ```
 
 ### 重定向及别名与命名视图
-[toTop](#目录：)  
+[toTop](#目录)  
 1. 什么是重定向？将一个跳转指向另一个跳转，如输入／a后会自动改为／b并跳转至／b路由
 2. 什么是别名？将一个跳转行为转化为另一个跳转行为，但是url不变
 告诉我，在哪可以买到？  
@@ -158,7 +158,7 @@ routes: [
 
 ## vueRouter进阶使用
 ### 路由钩子
-[toTop](#目录：)  
+[toTop](#目录)  
 1. 全局钩子，router实例有一个beforeEach方法，在一个页面跳转行为发生，进入页面前；afterEach，见名知意，因此不存在from与next [go detail](#全局钩子)
 2. 路由独享钩子，在routes配置中定义 [go detail](#路由独享钩子)
 3. 组件钩子，beforeRouteEnter，beforeRouteUpdate，beforeRouteLevel [go detail](#组件钩子)
@@ -223,13 +223,13 @@ beforeRouteEnter (to, from, next) => {
 ```
 
 ### 元信息与滚动行为
-[toTop](#目录：)  
+[toTop](#目录)  
 
 ### 过渡动效与数据获取
-[toTop](#目录：)  
+[toTop](#目录)  
 
 ### 异步加载模块
-[toTop](#目录：)  
+[toTop](#目录)  
 
 ## vueRouterAPI
-[toTop](#目录：)  
+[toTop](#目录)  
