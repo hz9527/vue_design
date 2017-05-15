@@ -98,7 +98,7 @@ routes: [
 
 ### h5history与编程式导航
 [toTop](#目录：)  
-vue-router关于history管理完全参照h5history接口[传送门](../../h5history.md)  
+vue-router关于history管理完全参照h5history接口[传送门](../../blob/master/h5history.md)  
 我们知道，在vue－router中跳转路由，主要有两种类型，一种是使用<router-link></router-link>，另一种则是使用组件的$router(也可使用router实例)  
 几个接口  
 1. push在history盏中推入一个路由
