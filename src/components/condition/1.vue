@@ -5,6 +5,12 @@
     <p>使用immediate: true可以使watch在初始化就能执行</p>
     <p @click='changeV1'>v1:{{v1}}  click change v1</p>
     <p @click='changeV'>v2:{{v2}}  click change v1&v2</p>
+    <div :style='{"height": "800px"}'>
+
+    </div>
+    <div id='test'>
+      test
+    </div>
   </div>
 </template>
 
@@ -38,7 +44,7 @@ export default {
     }
   },
   created () {
-    // console.log(this.$router, this.$route)
+    // console.log(this.$route)
   }
 }
 </script>

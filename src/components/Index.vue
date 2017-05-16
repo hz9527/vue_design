@@ -3,7 +3,7 @@
     <h1>vue数据跟踪机制探究</h1>
     <h2>watch computed methods追踪变化的条件</h2>
     <ul>
-      <li><router-link to='condition1'>watch初体验</router-link></li>
+      <li><router-link :to="{name:'1.1', hash: '#test', query: {name: 'hz'}}">watch初体验</router-link></li>
       <li><router-link to='condition2'>watch computed</router-link></li>
       <li><router-link to='condition3'>computed初体验</router-link></li>
       <li><router-link to='condition4'>computed初始化（不绑定也不参与计算）</router-link></li>

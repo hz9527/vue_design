@@ -120,6 +120,9 @@ router.push({name: 'name', params: {userId: id, essayId: essayId}})
 
 router.push({name: 'name', params: {userId: id}, query: {name: 'hz'}})
 ```
+> 注：hash，query等都将放在路由后，记得hash加＃,另外复习一下锚点，锚点标签使用id xx（a标签可以使用name xx），跳转至锚点使用a标签href ＃xx  
+在vue中切记不要使用a 锚点跳转，因为它会修改url。当然vuerouter中锚点并不会给我跳至锚点，只是作为一个标识，具体可以使用scrollBehavior配置来实现  
+query也是放置在路由后的，但会在锚点前10
 
 ### 重定向及别名与命名视图
 [toTop](#目录)  
@@ -295,15 +298,104 @@ router.beforeEach((to, from, next) => {
 
 ### 过渡动效与数据获取
 [toTop](#目录)  
+其实我们可以把router-view标签当作是一个组件，因此可以通过它监听子路由传入的事件，也可以使用transition标签包裹它来实现过渡效果  
+数据获取一般有两种方式1.进入路由然后loading 2.在组件路由钩子beforeRouteEnter中加载完再执行next方法  
 
 ### 异步加载模块
 [toTop](#目录)  
+一个项目有多个模块，模块间依赖较少，比如我们将多个模块做到一个app里，不同人群可能使用不同入口，我们似不似可以考虑分模块打包吖？  
+以前一直以为分模块打包很复杂，现在看来简直简单的要命，直接看代码吧
+```JavaScript
+import Index from './index.vue'
+const Publish = resolve => require(['./Publish'], resolve)
+const Sale = resolve => {
+  // require.ensure 是 Webpack 的特殊语法，用来设置 code-split point
+  // （代码分块）
+  require.ensure(['./sale.vue'], () => {
+    resolve(require('./sale.vue'))
+  })
+}
+const List = resolve => require.ensure([], () => reslove(require(['./list.vue'])), 'chunkName')
+export default new vueRouter({
+  routes: [
+    ...
+  ]
+})
+```
+分析：这里主要是使用了require的异步模式，并配合webpack来实现分模块打包。我们知道当一个路由进入另一个路由时会产生责任链模式，并依赖与next才能进入下一个流程，我想应该就是这个原理吧  
+[AMD](https://github.com/amdjs/amdjs-api/wiki/AMD-(%E4%B8%AD%E6%96%87%E7%89%88))
+
 
 ## vueRouterAPI
-[toTop](#目录)  
 ### routerlink与routerview标签
 [toTop](#目录)  
+#### routerlink标签
+1. to属性 跳转方式既可以:to也可以to
+2. replace属性 默认为push，这个不需要值
+3. append属性 是否基于原来路由，也不需要值
+4. tag属性 将routerlink渲染成什么标签，默认为a
+5. active-class属性 设置active状态样式类，默认router-link-active
+6. events属性 监听的方法命字符串或字符串数组默认为click
+7. routerlink支持嵌套（不需要插槽）
+```html
+<router-link to='/'></router-link>
+<router-link :to="{path: '/', hash: '#test'}"></router-link>
+
+<router-link to='/' repalce></router-link>
+
+<!--if cur href is /a so it will go /a/b-->
+<router-link to='b' append></router-link>
+
+<router-link to='/' tag='span'></router-link>
+
+<router-link to='/' active-class='test'></router-link>
+
+<router-link to='/' events='mousedown'></router-link>
+
+<router-link to='/' :events="['click', mouseover]"></router-link>
+
+<router-link to='/'>
+  <span>test</span>
+</router-link>
+```
+
+#### routerview标签
+一般我们是直接使用一个routerview标签，比如跟页面，父页面，但是其实一个页面可以使用多个router  
+比如一个pc项目，可能会将导航栏和顶部在一部分页面存在，所以此时可以使用命名路由  
+更常见的可能是，父页面中，有一部内容需要更换，但一部分不需要  
+验证了下，多个页面共享一些路由时，重复的路由不会重新渲染
+```html
+<router-view></router-view>
+<router-view name='head'></router-view>
+```
+```JavaScript
+new vueRouter({
+  routers: [
+    {
+      path: '/index',
+      components: {
+        default: Index,
+        head: Head
+      }
+    },
+    {
+      path: '/list',
+      components: {
+        default: List,
+        head: Head
+      }
+    },
+    {
+      path: '/detail',
+      component: Detail
+    }
+  ]
+})
+```
+如上述代码，那么index 《－》 list过程中Head组件只需要create一次，但是list 《－》 detail Head就会反复创建与销毁，当然我们可以配合keepalive使用
+
 ### router路由对象与route路由信息对象
 [toTop](#目录)  
+
 ### 构造函数配置
 [toTop](#目录)  
