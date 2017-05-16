@@ -396,6 +396,52 @@ new vueRouter({
 
 ### router路由对象与route路由信息对象
 [toTop](#目录)  
+vuerouter被挂载到每个vue组件中了，可以使用this.$router访问路由对象，this.$route访问路由信息对象
+1. router对象主要控制跳转行为{name, hash, query, path}
+  * app vue根实例
+  * mode 模式
+  * currentRoute 当前路由信息
+  * push
+  * replace
+  * go
+  * back
+  * forward
+2. route存储了路由的信息
+  * name params matched query hash fullPath ...
+  * matched to.matched.some(info => info.meta.name === 'index')
+  * 使用watch观察$route
 
 ### 构造函数配置
 [toTop](#目录)  
+1. mode 定义路由模式，值为枚举"hash" | "history" | "abstract"（nodejs） 默认history  
+2. base 基础路径，默认／
+3. linkActiveClass routerlink激活时类名
+4. scrollBehavior
+```JavaScript
+new vueRouter({
+  mode: 'hash',
+  base: '/index',
+  linkActiveClass: 'link_active',
+  routes: [
+    ...
+  ],
+  scrollBehavior: (to, from, next) => {
+    ...
+  }
+})
+```
+**最后把routes单独拿出来**  
+```JavaScript
+{
+  path: string;
+  component?: Component;
+  name?: string; // for named routes (命名路由)
+  components?: { [name: string]: Component }; // for named views (命名视图组件)
+  redirect?: string | Location | Function;
+  alias?: string | Array<string>;
+  children?: Array<RouteConfig>; // for nested routes
+  beforeEnter?: (to: Route, from: Route, next: Function) => void;
+  meta?: any;
+}
+```
+其中path，component｜｜components为必填  
