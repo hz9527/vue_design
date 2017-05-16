@@ -11,15 +11,15 @@
 
 [**vueRouterAPI**](#vuerouterapi)  
 [routerlink与routerview标签](#routerlink与routerview标签)  
-[router路由对象（实例）与route路由信息对象](#router路由对象（实例）与route路由信息对象)  
+[router路由对象（实例）与route路由信息对象](#router路由对象与route路由信息对象)  
 [构造函数配置](#构造函数配置)
 
 ## vueRouter基本使用
 #### 1.引入vue－router与基本配置
 [toTop](#目录)  
 1. 类似vuex，先使用Vue.use(vue-router) 再实例化一个路由对象
-2. 在注入的组件中使用<view-router></view-router>
-3. 在注入实例中传入路由
+2. 在注入的组件中使用view-router标签
+3. 在注入实例中传入路由实例
 ```JavaScript
 // router-conf.js
 ...
@@ -104,7 +104,7 @@ routes: [
 ### h5history与编程式导航
 [toTop](#目录)  
 vue-router关于history管理完全参照h5history接口[传送门](../../blob/master/h5history.md)  
-我们知道，在vue－router中跳转路由，主要有两种类型，一种是使用<router-link></router-link>，另一种则是使用组件的$router(也可使用router实例)  
+我们知道，在vue－router中跳转路由，主要有两种类型，一种是使用router-link，另一种则是使用组件的$router(也可使用router实例)  
 几个接口  
 1. push在history盏中推入一个路由
 2. replace替换当前history纪录
@@ -302,5 +302,8 @@ router.beforeEach((to, from, next) => {
 ## vueRouterAPI
 [toTop](#目录)  
 ### routerlink与routerview标签
-### router路由对象（实例）与route路由信息对象
+[toTop](#目录)  
+### router路由对象与route路由信息对象
+[toTop](#目录)  
 ### 构造函数配置
+[toTop](#目录)  
