@@ -1,4 +1,4 @@
-#### 目录 
+#### 目录
 [**vueRouter基本使用**](#vuerouter基本使用)  
 [h5history与编程式导航](#h5history与编程式导航)  
 [重定向及别名与命名视图](#重定向及别名与命名视图)  
@@ -8,6 +8,11 @@
 [元信息与滚动行为](#元信息与滚动行为)  
 [过渡动效与数据获取](#过渡动效与数据获取)  
 [异步加载模块](#异步加载模块)  
+
+[**vueRouterAPI**](#vuerouterapi)  
+[routerlink与routerview标签](#routerlink与routerview标签)  
+[router路由对象（实例）与route路由信息对象](#router路由对象（实例）与route路由信息对象)  
+[构造函数配置](#构造函数配置)
 
 ## vueRouter基本使用
 #### 1.引入vue－router与基本配置
@@ -224,6 +229,69 @@ beforeRouteEnter (to, from, next) => {
 
 ### 元信息与滚动行为
 [toTop](#目录)  
+先说滚动行为吧，这个看起来还是很有用的，我们将滚动行为，这个钩子(scrollBehavior)位于配置项中  
+```JavaScript
+new vueRouter({
+  routes:[
+    ...
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    ...
+  }
+})
+```
+**scrollBehavior钩子如何使用？**  
+需要返回一个定位信息或锚点描述
+```JavaScript
+return {x: 0, y: 100}
+return {selector: '#floor3'}
+return savedPosition
+```
+**什么是savedPosition？**  
+在history中会对历史跳转的页面存储跳转是页面的位置（scrollTop），因此只适合popState操作，如点击浏览器前进或返回按钮，因此对它的判断是不准确的，因为我们也不知道to的route是否存在于history中。举个 :chestnut:  
+```JavaScript
+new vueRouter({
+  routes: [
+    ...
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (to.hash) {
+      return {selector: to.hash}
+    } else if (savedPosition) {
+      return savedPosition
+    } else {
+      if (to.name === 'list' && from.name === 'essay') {
+        return {x: 0, y: 100}
+      } else {
+        return {x: 0, y: 0}
+      }
+    }
+  }
+})
+```
+**元信息是什么鬼？**  
+虽然在配置项中用meta表示，但是暂时还没弄明白和html meta有啥关系，主要是对html meta也不太了解吧。不过可以作为一个标示来使用。  
+比如在某一些标识下我们需要做一些行为，另一些标识做另一些行为，比较常见得是，有写页面不需要用户登录，有些需要。  
+结合页面滚动，我们甚至可以把滚动信息存储在meta中  
+> 一个路由匹配到的所有路由记录会暴露为 $route 对象（还有在导航钩子中的 route 对象）的 $route.matched 数组。因此，我们需要遍历 $route.matched 来检查路由记录中的 meta 字段。
+
+```JavaScript
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) { // meta: {requiresAuth: true}
+    if (!auth.loggedIn()) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // 确保一定要调用 next()
+  }
+})
+```
+这样看来其实元信息可以作为跳转配置，在路由钩子中检查元信息，对于不同的元信息做不同的行为控制，这样更有利于代码的维护性，比如原来是判断name字段，根据name来完成不同的行为，这种判断显然交给meta对象更为合理，这样我们要修改行为不需要去更改逻辑代码，只需要更改配置代码即可
 
 ### 过渡动效与数据获取
 [toTop](#目录)  
@@ -233,3 +301,6 @@ beforeRouteEnter (to, from, next) => {
 
 ## vueRouterAPI
 [toTop](#目录)  
+### routerlink与routerview标签
+### router路由对象（实例）与route路由信息对象
+### 构造函数配置
