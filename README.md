@@ -18,12 +18,6 @@ npm run build
 npm run build --report
 ```
 
-看会儿笔记？  
-[vue](#vue)  
-[vuex初体验](./vuex.md)  
-[vueRouter初体验](./vuerouter.md)  
-[vueTouch初体验](./vuetouch.md)
-
 ## vue
 #### 大纲
 ![](./file/vue.png)  
@@ -32,3 +26,9 @@ npm run build --report
 #### dep,definedProperty,watcher如何工作的？
 ![](./file/set.png)  
 > 以上细节仅供参考，但是大致原理如上，确实不太清楚为什么每次get一个computed都需要重新收集依赖，可能是有些细节没注意到吧
+
+看会儿笔记？  
+[vue](.vue.md)  
+[vuex初体验](./vuex.md)  
+[vueRouter初体验](./vuerouter.md)  
+[vueTouch初体验](./vuetouch.md)
